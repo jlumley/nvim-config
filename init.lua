@@ -277,7 +277,7 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = {"markdown"},
   callback = function ()
     vim.opt.spelllang = 'en_us'
-    vim.apt.spell = true
+    vim.opt.spell = true
   end
 })
 -- END OF JLUMLEY
