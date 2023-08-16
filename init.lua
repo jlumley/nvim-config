@@ -272,6 +272,14 @@ vim.keymap.set("n", "<leader>Y", [["+Y]])
 -- delete to void register
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
+-- turn on spell checking for markdown files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"markdown"},
+  callback = function ()
+    vim.opt.spelllang = 'en_us'
+    vim.apt.spell = true
+  end
+})
 -- END OF JLUMLEY
 
 -- Keymaps for better default experience
