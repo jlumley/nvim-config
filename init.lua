@@ -113,7 +113,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -217,6 +217,41 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    opts = {} -- this is equalent to setup({}) function
+  },
+  {
+    'jinh0/eyeliner.nvim',
+    opts = {
+      highlight_on_key = true,
+      dim = false
+    }, -- this is equalent to setup({}) function
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
+    opts = {
+      suggestion = {
+        auto_trigger = true,
+        keymap = {
+          accept = "<M-j>",
+          accept_line = "<M-l>",
+          accept_word = "<M-k>",
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<M-c>",
+        },
+      },
+    },
+  },
+  -- {
+  --   "zbirenbaum/copilot-cmp",
+  --   config = function()
+  --     require("copilot_cmp").setup()
+  --   end
+  -- },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -278,6 +313,19 @@ vim.o.termguicolors = true
 -- [[ Basic Keymaps ]]
 
 -- START OF JLUMLEY
+-- Define a function to format the current buffer with bean-format
+local function file_format()
+  local current_ft = vim.bo.filetype
+  local current_line = vim.fn.line(".")
+  if current_ft == "beancount" then
+    vim.cmd(":%!bean-format")
+  else
+    vim.lsp.buf.format()
+  end
+  vim.api.nvim_win_set_cursor(0, { current_line, 0 })
+end
+
+vim.keymap.set('n', '<leader>f', file_format, { noremap = true, silent = true })
 -- move highlight with J K
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -287,6 +335,7 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzz")
 vim.keymap.set("n", "N", "Nzz")
+vim.keymap.set("n", "G", "Gzz")
 
 -- delete and paste without saving to register
 vim.keymap.set("x", "<leader>p", [["_dP]])
@@ -319,6 +368,11 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+-- -- [[Configure Copilot ]]
+-- require("copilot").setup({
+--   suggestion = { enabled = false },
+--   panel = { enabled = false },
+-- })
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
@@ -562,15 +616,15 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
+    -- ['<Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_next_item()
+    --   elseif luasnip.expand_or_locally_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -589,3 +643,5 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+--
