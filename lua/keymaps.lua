@@ -1,16 +1,3 @@
--- Define a function to format the current buffer with bean-format
-local function file_format()
-  local current_ft = vim.bo.filetype
-  local current_line = vim.fn.line '.'
-  if current_ft == 'beancount' then
-    vim.cmd ':%!bean-format'
-  else
-    vim.lsp.buf.format()
-  end
-  vim.api.nvim_win_set_cursor(0, { current_line, 0 })
-end
-
-vim.keymap.set('n', '<leader>f', file_format, { noremap = true, silent = true })
 -- move highlight with J K
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
