@@ -9,12 +9,5 @@ vim.keymap.set('n', 'n', 'nzz')
 vim.keymap.set('n', 'N', 'Nzz')
 vim.keymap.set('n', 'G', 'Gzz')
 
--- delete and paste without saving to register
-vim.keymap.set('x', '<leader>p', [["_dP]])
-
--- yank to system clipboard
-vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
-vim.keymap.set('n', '<leader>Y', [["+Y]])
-
--- delete to void register
-vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]])
+-- keymaps for todo-comments
+vim.keymap.set('n', '<leader>st', ':TodoTelescope<CR>', { desc = '[S]earch [T]odo comments' })
