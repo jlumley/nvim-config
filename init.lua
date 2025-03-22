@@ -175,6 +175,7 @@ require('lazy').setup({
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
+
   -- This is often very useful to both group configuration, as well as handle
   -- lazy loading plugins that don't need to be loaded immediately at startup.
   --
@@ -543,12 +544,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
       },
       'saadparwaiz1/cmp_luasnip',
@@ -564,6 +565,22 @@ require('lazy').setup({
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
       luasnip.config.setup {}
+
+      -- Function to load snippets from the current working directory
+      local function load_snippets_from_cwd()
+        local cwd = vim.fn.getcwd()
+        local snippets_dir = cwd .. '/snippets'
+
+        -- Load snippets fr  -- Check if the directory exists
+        if vim.fn.isdirectory(snippets_dir) == 1 then
+          -- Manually load snippets from the specified directory
+          require('luasnip.loaders.from_lua').lazy_load { paths = { snippets_dir } }
+          vim.notify('Loaded project snippets', vim.log.levels.INFO)
+        end
+      end
+
+      -- Call the function to load snippets
+      load_snippets_from_cwd()
 
       cmp.setup {
         snippet = {
@@ -626,14 +643,14 @@ require('lazy').setup({
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
         sources = {
+          { name = 'nvim_lsp', group_index = 2 },
+          { name = 'luasnip', group_index = 2 },
           { name = 'copilot', group_index = 2 },
           {
             name = 'lazydev',
             -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
             group_index = 0,
           },
-          { name = 'nvim_lsp', group_index = 2 },
-          { name = 'luasnip', group_index = 2 },
           { name = 'path', group_index = 2 },
         },
       }
