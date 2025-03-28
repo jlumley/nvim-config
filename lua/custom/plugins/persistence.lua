@@ -13,23 +13,23 @@ return {
     require('persistence').setup()
 
     -- load the session for the current directory
-    vim.keymap.set('n', '<leader>qs', function()
+    vim.keymap.set('n', '<leader>lS', function()
       require('persistence').load()
-    end)
+    end, { desc = '[L]oad [S]ession' })
 
     -- select a session to load
-    vim.keymap.set('n', '<leader>qS', function()
+    vim.keymap.set('n', '<leader>ls', function()
       require('persistence').select()
-    end)
+    end, { desc = '[L]oad [S]elect session' })
 
     -- load the last session
-    vim.keymap.set('n', '<leader>ql', function()
+    vim.keymap.set('n', '<leader>ll', function()
       require('persistence').load { last = true }
-    end)
+    end, { desc = '[L]oad [L]ast session' })
 
     -- stop Persistence => session won't be saved on exit
-    vim.keymap.set('n', '<leader>qd', function()
+    vim.keymap.set('n', '<leader>ld', function()
       require('persistence').stop()
-    end)
+    end, { desc = '[L] [D]elete session' })
   end,
 }
