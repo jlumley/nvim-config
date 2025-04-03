@@ -16,6 +16,7 @@ return {
     picker = { enabled = true },
     quickfile = { enabled = true },
     scope = { enabled = true },
+    scratch = { enabled = true },
     scroll = { enabled = false },
     statuscolumn = { enabled = true },
     words = { enabled = true },
@@ -31,7 +32,7 @@ return {
     {
       '<leader><space>',
       function()
-        Snacks.picker.smart()
+        Snacks.picker.smart { filter = { cwd = true } }
       end,
       desc = 'Smart Find Files',
     },
@@ -45,7 +46,7 @@ return {
     {
       '<leader>/',
       function()
-        Snacks.picker.grep()
+        Snacks.picker.grep { filter = { cwd = true } }
       end,
       desc = 'Grep',
     },
@@ -109,7 +110,7 @@ return {
     {
       '<leader>rr',
       function()
-        Snacks.picker.recent()
+        Snacks.picker.recent { filter = { cwd = true } }
       end,
       desc = 'Recent',
     },
