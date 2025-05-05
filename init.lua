@@ -509,12 +509,12 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-        beancount = {
-          filetypes = { 'beancount', 'fava' },
-          init_options = {
-            journalFile = 'main.beancount',
-          },
-        },
+        -- beancount = {
+        --   filetypes = { 'beancount', 'fava' },
+        --   init_options = {
+        --     journalFile = 'main.beancount',
+        --   },
+        -- },
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
