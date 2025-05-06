@@ -4,7 +4,7 @@ return {
     event = 'InsertEnter',
     opts = {
       suggestion = {
-        enabled = false,
+        enabled = true,
       },
       panel = {
         enabled = false,
