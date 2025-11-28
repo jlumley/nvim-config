@@ -1,7 +1,7 @@
 return {
   'OXY2DEV/markview.nvim',
   lazy = true,
-  ft = { 'codecompainion' },
+  ft = { 'codecompainion', 'markdown' },
 
   dependencies = {
     'nvim-treesitter/nvim-treesitter',
