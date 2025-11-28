@@ -8,7 +8,6 @@ return {
       'L3MON4D3/LuaSnip',
       'rafamadriz/friendly-snippets',
       'nvim-lua/plenary.nvim',
-      'milanglacier/minuet-ai.nvim',
     },
     event = 'InsertEnter',
     config = function()
@@ -23,26 +22,6 @@ return {
         vim.notify('Loaded project snippets', vim.log.levels.INFO)
       end
 
-      -- Minuet (Ollama / FIM)
-      require('minuet').setup {
-        provider = 'openai_fim_compatible',
-        n_completions = 1,
-        context_window = 128,
-        request_timeout = 3,
-        provider_options = {
-          openai_fim_compatible = {
-            name = 'Ollama',
-            end_point = 'http://localhost:11434/v1/completions',
-            model = 'qwen2.5-coder:7b',
-            api_key = 'TERM', -- dummy
-            optional = {
-              max_tokens = 64,
-              top_p = 0.9,
-            },
-          },
-        },
-      }
-
       -- blink.cmp setup
       require('blink.cmp').setup {
         snippets = {
@@ -52,17 +31,8 @@ return {
           preset = 'default',
         },
         sources = {
-          default = { 'snippets', 'lsp', 'path', 'buffer', 'minuet' },
+          default = { 'snippets', 'lsp', 'path', 'buffer' },
           -- default = { 'minuet' },
-          providers = {
-            minuet = {
-              name = 'minuet',
-              module = 'minuet.blink',
-              async = true,
-              timeout_ms = 3000,
-              score_offset = 50,
-            },
-          },
         },
         completion = {
           trigger = { prefetch_on_insert = true }, -- don’t auto-fire AI
