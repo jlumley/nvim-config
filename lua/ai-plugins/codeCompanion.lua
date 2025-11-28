@@ -25,8 +25,8 @@ return {
         --  - If COPILOT=true → Copilot inline
         --  - Else → Ollama (your local qwen2.5-coder:7b)
         inline = {
-          adapter = use_copilot and 'copilot' or { name = 'ollama', model = 'qwen2.5-coder:7b' },
-          -- adapter = use_copilot and 'copilot' or 'anthropic',
+          -- adapter = use_copilot and 'copilot' or { name = 'ollama', model = 'qwen2.5-coder:7b' },
+          adapter = use_copilot and 'copilot' or 'anthropic',
           keymaps = {
             accept_change = {
               modes = { n = 'ga' },
