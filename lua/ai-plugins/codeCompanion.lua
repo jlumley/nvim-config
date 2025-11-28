@@ -10,6 +10,7 @@ return {
   opts = function()
     -- Read env flag: set COPILOT=true in ~/.zshenv on your work machine
     local use_copilot = (vim.env.COPILOT == 'true')
+    local HAIKU_MODEL = 'claude-haiku-4-5-20251001'
 
     return {
       strategies = {
@@ -38,7 +39,8 @@ return {
               },
               schema = {
                 model = {
-                  default = 'claude-sonnet-4-20250514',
+                  default = HAIKU_MODEL,
+                  max_tokens = 1024, -- Limit token output
                 },
               },
             })
