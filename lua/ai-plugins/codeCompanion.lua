@@ -11,7 +11,7 @@ return {
     -- Read env flag: set COPILOT=true in ~/.zshenv on your work machine
     local use_copilot = (vim.env.COPILOT == 'true')
     local HAIKU_MODEL = 'claude-haiku-4-5-20251001'
-    local SONNET_MODEL = 'claude-3-5-sonnet-20241022'
+    local SONNET_MODEL = 'claude-sonnet-4-5-20250929'
 
     return {
       strategies = {
