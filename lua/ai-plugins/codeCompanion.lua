@@ -11,22 +11,15 @@ return {
     -- Read env flag: set COPILOT=true in ~/.zshenv on your work machine
     local use_copilot = (vim.env.COPILOT == 'true')
     local HAIKU_MODEL = 'claude-haiku-4-5-20251001'
+    local SONNET_MODEL = 'claude-3-5-sonnet-20241022'
 
-    -- Define custom actions
     return {
       strategies = {
-        -- Chat:
-        --  - If COPILOT=true → use Copilot
-        --  - Else → Anthropic (your existing Claude setup)
         chat = {
-          adapter = use_copilot and 'copilot' or 'anthropic',
+          adapter = use_copilot and 'copilot' or 'anthropic_sonnet',
         },
-        -- Inline:
-        --  - If COPILOT=true → Copilot inline
-        --  - Else → Ollama (your local qwen2.5-coder:7b)
         inline = {
-          -- adapter = use_copilot and 'copilot' or { name = 'ollama', model = 'qwen2.5-coder:7b' },
-          adapter = use_copilot and 'copilot' or 'anthropic',
+          adapter = use_copilot and 'copilot' or 'anthropic_haiku',
           keymaps = {
             accept_change = {
               modes = { n = 'ga' },
@@ -41,8 +34,7 @@ return {
       },
       adapters = {
         http = {
-          -- Anthropic adapter (Claude)
-          anthropic = function()
+          anthropic_haiku = function()
             return require('codecompanion.adapters').extend('anthropic', {
               env = {
                 api_key = 'ANTHROPIC_API_KEY',
@@ -51,13 +43,21 @@ return {
                 model = {
                   default = HAIKU_MODEL,
                 },
-                -- max_tokens = {
-                --   default = 2048, -- Limit token output
-                -- },
               },
             })
           end,
-          -- Ollama adapter (your local model)
+          anthropic_sonnet = function()
+            return require('codecompanion.adapters').extend('anthropic', {
+              env = {
+                api_key = 'ANTHROPIC_API_KEY',
+              },
+              schema = {
+                model = {
+                  default = SONNET_MODEL,
+                },
+              },
+            })
+          end,
           ollama = function()
             return require('codecompanion.adapters').extend('ollama', {
               opts = { stream = true },
@@ -68,8 +68,8 @@ return {
             })
           end,
         },
-        -- Copilot adapter is built-in to CodeCompanion, works automatically
       },
+      -- Copilot adapter is built-in to CodeCompanion, works automatically
       display = {
         action_palette = {
           provider = 'snacks',
