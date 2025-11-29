@@ -16,7 +16,7 @@ return {
     return {
       strategies = {
         chat = {
-          adapter = use_copilot and 'copilot' or 'anthropic_sonnet',
+          adapter = use_copilot and 'copilot' or 'anthropic_haiku',
         },
         inline = {
           adapter = use_copilot and 'copilot' or 'anthropic_haiku',
