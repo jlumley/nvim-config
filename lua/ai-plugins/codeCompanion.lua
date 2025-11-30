@@ -43,6 +43,9 @@ return {
                 model = {
                   default = HAIKU_MODEL,
                 },
+                max_output_tokens = {
+                  default = 10000,
+                },
               },
             })
           end,
@@ -54,6 +57,9 @@ return {
               schema = {
                 model = {
                   default = SONNET_MODEL,
+                },
+                max_output_tokens = {
+                  default = 10000,
                 },
               },
             })
@@ -82,7 +88,12 @@ return {
   end,
   keys = {
     -- Normal mode: just open CodeCompanion
-    { '<leader>cp', '<cmd>CodeCompanion<CR>', mode = 'n', desc = 'Inline prompt' },
+    {
+      '<leader>cp',
+      ':%CodeCompanion<CR>',
+      mode = 'n',
+      desc = 'Inline prompt (whole file)',
+    },
 
     -- Visual mode: preserve the range so inline works
     { '<leader>cp', ":'<,'>CodeCompanion<CR>", mode = 'v', desc = 'Inline prompt (range)' },
