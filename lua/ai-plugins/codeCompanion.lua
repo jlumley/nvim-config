@@ -10,16 +10,21 @@ return {
   opts = function()
     -- Read env flag: set COPILOT=true in ~/.zshenv on your work machine
     local use_copilot = (vim.env.COPILOT == 'true')
+    local MAX_OUTPUT_TOKENS = 10000
     local HAIKU_MODEL = 'claude-haiku-4-5-20251001'
     local SONNET_MODEL = 'claude-sonnet-4-5-20250929'
+    local GEMINI_MODEL = 'gemini-2.5-flash-preview-09-2025'
+
+    local chat_adapter = use_copilot and 'copilot' or 'anthropic_haiku'
+    local inline_adapter = use_copilot and 'copilot' or 'gemini_flash'
 
     return {
       strategies = {
         chat = {
-          adapter = use_copilot and 'copilot' or 'anthropic_haiku',
+          adapter = chat_adapter,
         },
         inline = {
-          adapter = use_copilot and 'copilot' or 'anthropic_haiku',
+          adapter = inline_adapter,
           keymaps = {
             accept_change = {
               modes = { n = 'ga' },
@@ -44,32 +49,23 @@ return {
                   default = HAIKU_MODEL,
                 },
                 max_output_tokens = {
-                  default = 10000,
+                  default = MAX_OUTPUT_TOKENS,
                 },
               },
             })
           end,
-          anthropic_sonnet = function()
-            return require('codecompanion.adapters').extend('anthropic', {
+          gemini_flash = function()
+            return require('codecompanion.adapters').extend('gemini', {
               env = {
-                api_key = 'ANTHROPIC_API_KEY',
+                api_key = 'GEMINI_API_KEY',
               },
               schema = {
                 model = {
-                  default = SONNET_MODEL,
+                  default = GEMINI_MODEL,
                 },
                 max_output_tokens = {
-                  default = 10000,
+                  default = MAX_OUTPUT_TOKENS,
                 },
-              },
-            })
-          end,
-          ollama = function()
-            return require('codecompanion.adapters').extend('ollama', {
-              opts = { stream = true },
-              schema = {
-                num_ctx = { default = 16384 },
-                keep_alive = { default = '5m' },
               },
             })
           end,

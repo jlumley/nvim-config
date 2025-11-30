@@ -11,12 +11,11 @@ return {
     },
     event = 'InsertEnter',
     config = function()
-      -- Load snippets from friendly-snippets
+      -- Load snippets from friendly-snippets (VS Code format)
       require('luasnip.loaders.from_vscode').lazy_load()
 
-      -- Optional: Load project snippets
-      local cwd = vim.fn.getcwd()
-      local snippets_dir = cwd .. '/snippets'
+      -- Optional: Load project snippets (LuaSnip format) located in ./snippets
+      local snippets_dir = vim.fn.getcwd() .. '/snippets'
       if vim.fn.isdirectory(snippets_dir) == 1 then
         require('luasnip.loaders.from_lua').lazy_load { paths = { snippets_dir } }
         vim.notify('Loaded project snippets', vim.log.levels.INFO)
@@ -25,30 +24,24 @@ return {
       -- blink.cmp setup
       require('blink.cmp').setup {
         snippets = {
-          preset = 'luasnip',
+          preset = 'luasnip', -- Use LuaSnip integration
         },
         keymap = {
           preset = 'default',
         },
         sources = {
+          -- Prioritize snippets, then LSP, path, and buffer completion
           default = { 'snippets', 'lsp', 'path', 'buffer' },
-          -- default = { 'minuet' },
         },
         completion = {
-          trigger = { prefetch_on_insert = true }, -- don’t auto-fire AI
+          -- Pre-fetch candidates when entering insert mode to reduce lag
+          trigger = { prefetch_on_insert = true },
         },
         appearance = {
+          -- Use nvim-cmp UI compatibility mode
           use_nvim_cmp_as_default = true,
         },
       }
     end,
-
-    -- Map <C-Space> to trigger Minuet AI completions
-    vim.api.nvim_set_keymap(
-      'i', -- Insert mode
-      '<C-Space>', -- Keybinding
-      "<cmd>lua require('minuet').complete()<CR>", -- Command to run
-      { noremap = true, silent = true } -- Options
-    ),
   },
 }
