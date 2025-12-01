@@ -3,28 +3,44 @@ return {
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-treesitter/nvim-treesitter',
-    -- Needed for Copilot adapter integration
     'github/copilot.vim',
   },
   cmd = { 'CodeCompanion' },
   opts = function()
-    -- Read env flag: set COPILOT=true in ~/.zshenv on your work machine
-    local use_copilot = (vim.env.COPILOT == 'true')
+    -- Model configuration
     local MAX_OUTPUT_TOKENS = 10000
     local HAIKU_MODEL = 'claude-haiku-4-5-20251001'
-    local SONNET_MODEL = 'claude-sonnet-4-5-20250929'
     local GEMINI_MODEL = 'gemini-2.5-flash-lite'
 
-    local chat_adapter = use_copilot and 'copilot' or 'anthropic_haiku'
-    local inline_adapter = use_copilot and 'copilot' or 'gemini_flash'
+    -- Read env flag: set COPILOT=true in ~/.zshenv on your work machine
+    local use_copilot = (vim.env.COPILOT == 'true')
+
+    -- Docs pattern: adapter can be a table { name = "..", model = ".." }
+    -- https://codecompanion.olimorris.dev/configuration/adapters#changing-a-model
+    local chat_adapter = use_copilot and 'copilot' or {
+      name = 'anthropic',
+      model = HAIKU_MODEL,
+    }
+
+    local inline_adapter = use_copilot and 'copilot' or {
+      name = 'gemini',
+      model = GEMINI_MODEL,
+    }
 
     return {
       strategies = {
         chat = {
           adapter = chat_adapter,
+          opts = {
+            -- some adapters honour this; harmless if ignored
+            max_output_tokens = MAX_OUTPUT_TOKENS,
+          },
         },
         inline = {
           adapter = inline_adapter,
+          opts = {
+            max_output_tokens = MAX_OUTPUT_TOKENS,
+          },
           keymaps = {
             accept_change = {
               modes = { n = 'ga' },
@@ -37,63 +53,31 @@ return {
           },
         },
       },
-      adapters = {
-        http = {
-          anthropic_haiku = function()
-            return require('codecompanion.adapters').extend('anthropic', {
-              env = {
-                api_key = 'ANTHROPIC_API_KEY',
-              },
-              schema = {
-                model = {
-                  default = HAIKU_MODEL,
-                },
-                max_output_tokens = {
-                  default = MAX_OUTPUT_TOKENS,
-                },
-              },
-            })
-          end,
-          gemini_flash = function()
-            return require('codecompanion.adapters').extend('gemini', {
-              env = {
-                api_key = 'GEMINI_API_KEY',
-              },
-              schema = {
-                model = {
-                  default = GEMINI_MODEL,
-                },
-                max_output_tokens = {
-                  default = MAX_OUTPUT_TOKENS,
-                },
-              },
-            })
-          end,
-        },
-      },
-      -- Copilot adapter is built-in to CodeCompanion, works automatically
+
+      -- NOTE: no `adapters = { http = ... }` block here
+
       display = {
         action_palette = {
           provider = 'snacks',
           opts = {
-            show_default_actions = true, -- Show built-in actions
+            show_default_actions = true,
           },
         },
+      },
+      opts = {
+        -- Enable this if you want to sanity-check which adapter/model is actually used
+        -- log_level = 'DEBUG',
       },
     }
   end,
   keys = {
-    -- Normal mode: just open CodeCompanion
     {
       '<leader>cp',
       ':%CodeCompanion<CR>',
       mode = 'n',
       desc = 'Inline prompt (whole file)',
     },
-
-    -- Visual mode: preserve the range so inline works
     { '<leader>cp', ":'<,'>CodeCompanion<CR>", mode = 'v', desc = 'Inline prompt (range)' },
-
     { '<leader>cc', '<cmd>CodeCompanionChat<CR>', mode = { 'n', 'v' }, desc = 'Chat prompt' },
     { '<leader>ca', '<cmd>CodeCompanionActions<CR>', mode = { 'n', 'v' }, desc = 'Actions prompt' },
   },
