@@ -13,7 +13,7 @@ return {
     local MAX_OUTPUT_TOKENS = 10000
     local HAIKU_MODEL = 'claude-haiku-4-5-20251001'
     local SONNET_MODEL = 'claude-sonnet-4-5-20250929'
-    local GEMINI_MODEL = 'gemini-2.5-flash-preview-09-2025'
+    local GEMINI_MODEL = 'gemini-2.5-flash-lite'
 
     local chat_adapter = use_copilot and 'copilot' or 'anthropic_haiku'
     local inline_adapter = use_copilot and 'copilot' or 'gemini_flash'
