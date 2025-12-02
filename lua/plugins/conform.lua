@@ -1,3 +1,4 @@
+-- filepath: lua/custom/plugins/conform.lua
 return { -- Autoformat
   'stevearc/conform.nvim',
   event = { 'BufWritePre' },
@@ -14,31 +15,28 @@ return { -- Autoformat
   },
   opts = {
     notify_on_error = false,
+
+    -- Configure format-on-save behavior
     format_on_save = function(bufnr)
-      -- Disable "format_on_save lsp_fallback" for languages that don't
-      -- have a well standardized coding style. You can add additional
-      -- languages here or re-enable it for the disabled ones.
       local disable_filetypes = { c = true, cpp = true, typescript = true }
-      local lsp_format_opt
-      if disable_filetypes[vim.bo[bufnr].filetype] then
-        lsp_format_opt = 'never'
-      else
-        lsp_format_opt = 'fallback'
-      end
+      local lsp_format_opt = disable_filetypes[vim.bo[bufnr].filetype] and 'never' or 'fallback'
+
       return {
         timeout_ms = 500,
         lsp_format = lsp_format_opt,
       }
     end,
+
+    -- Formatter configuration by file type
     formatters_by_ft = {
+      -- Scripting languages
       lua = { 'stylua' },
-      -- Conform can also run multiple formatters sequentially
       python = { 'black' },
-      --
-      beancount = { 'bean-format' },
+      bash = { 'shfmt' },
+
+      -- Web development (runs in order, use multiple for fallback)
       typescript = { 'prettierd', 'prettier' },
-      -- You can use 'stop_after_first' to run the first available formatter from the list
-      -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      -- javascript = { 'prettierd', 'prettier', stop_after_first = true },
     },
   },
 }
