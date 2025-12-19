@@ -51,19 +51,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Plugins ]]
 require('lazy').setup({
-  -- Basic editor helpers
-  'tpope/vim-sleuth',
 
-  {
-    'folke/tokyonight.nvim',
-    priority = 1000,
-    init = function()
-      vim.cmd.colorscheme 'tokyonight-night'
-      vim.cmd.hi 'Comment gui=none'
-    end,
-  },
-
-  -- Your modular plugin configs:
   { import = 'plugins' },
   { import = 'ai-plugins' },
 }, {
