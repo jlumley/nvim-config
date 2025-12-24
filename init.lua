@@ -59,4 +59,8 @@ require('lazy').setup({
   ui = {
     icons = {},
   },
+  rocks = {
+    enabled = true,
+    hererocks = true,
+  },
 })
