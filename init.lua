@@ -50,12 +50,12 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- [[ Plugins ]]
-require('lazy').setup({
-
-  { import = 'plugins' },
-  { import = 'ai-plugins' },
-}, {
+local imports = { { import = 'plugins' } }
+local ai_plugins_env = os.getenv 'VIM_AI_PLUGINS'
+if ai_plugins_env then
+  table.insert(imports, 2, { import = 'ai-plugins' })
+end
+require('lazy').setup(imports, {
   ui = {
     icons = {},
   },
