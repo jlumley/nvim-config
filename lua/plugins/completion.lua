@@ -18,17 +18,14 @@ return {
         vim.notify('Loaded project snippets', vim.log.levels.INFO)
       end
 
-      local sources = { 'snippets', 'lsp', 'path', 'buffer' }
+      local sources = { 'snippets', 'copilot', 'lsp', 'path', 'buffer' }
       local providers = {}
-      -- TODO: featue flag copilot completion
-      table.insert(sources, 2, 'copilot')
       providers.copilot = {
         name = 'copilot',
         module = 'blink-copilot',
         score_offset = 100,
         async = true,
       }
-      vim.notify('blink.cmp: copilot source enabled', vim.log.levels.INFO)
 
       require('blink.cmp').setup {
         snippets = {
