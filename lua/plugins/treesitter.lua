@@ -2,7 +2,7 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    branch = 'main',
+    branch = 'master',
     lazy = false, -- main branch does NOT support lazy-loading
     build = ':TSUpdate',
     config = function()
@@ -30,8 +30,12 @@ return {
         callback = function(args)
           local buf = args.buf
           local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
-          if not lang then return end
-          if not pcall(vim.treesitter.start, buf, lang) then return end
+          if not lang then
+            return
+          end
+          if not pcall(vim.treesitter.start, buf, lang) then
+            return
+          end
           vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
       })
