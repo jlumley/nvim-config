@@ -2,32 +2,47 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
+    branch = 'main',
+    lazy = false, -- main branch does NOT support lazy-loading
     build = ':TSUpdate',
     config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = {
-          'bash',
-          'c',
-          'diff',
-          'html',
-          'lua',
-          'luadoc',
-          'markdown',
-          'markdown_inline',
-          'query',
-          'vim',
-          'vimdoc',
-        },
-        auto_install = true,
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = { 'ruby' },
-        },
-        indent = { enable = true, disable = { 'ruby' } },
+      local ts = require 'nvim-treesitter'
+
+      local ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
       }
 
-      -- Manual textobject keymaps
+      -- Install parsers (async). Re-run :TSUpdate to update them.
+      ts.install(ensure_installed)
+
+      -- Highlighting + indentation are now enabled per-buffer via an autocmd.
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          local buf = args.buf
+          local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
+          if not lang then return end
+          if not pcall(vim.treesitter.start, buf, lang) then return end
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+    end,
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    branch = 'main',
+    config = function()
+      require('nvim-treesitter-textobjects').setup {}
+
       local select = require('nvim-treesitter-textobjects.select').select_textobject
       vim.keymap.set({ 'x', 'o' }, 'af', function()
         select('@function.outer', 'textobjects')
