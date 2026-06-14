@@ -60,7 +60,6 @@ require('lazy').setup(imports, {
     icons = {},
   },
   rocks = {
-    enabled = true,
-    hererocks = true,
+    enabled = false,
   },
 })
