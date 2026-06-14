@@ -2,7 +2,7 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    branch = 'master',
+    branch = 'main',
     lazy = false, -- main branch does NOT support lazy-loading
     build = ':TSUpdate',
     config = function()
