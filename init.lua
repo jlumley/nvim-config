@@ -14,6 +14,11 @@ vim.opt.mouse = 'a'
 vim.opt.showmode = false
 vim.o.tabstop = 4
 
+-- Enable 24-bit (true) colors. Required for everforest and treesitter's
+-- @* capture groups, which define GUI colors only -- without this most
+-- highlighting renders with no color.
+vim.opt.termguicolors = true
+
 vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
