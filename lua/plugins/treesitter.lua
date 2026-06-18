@@ -12,18 +12,19 @@ return {
         'bash',
         'c',
         'diff',
+        'gitcommit',
+        'go',
         'html',
-        'python',
-        'typescript',
-        'golang',
-        'yaml',
         'lua',
         'luadoc',
         'markdown',
         'markdown_inline',
+        'python',
         'query',
+        'typescript',
         'vim',
         'vimdoc',
+        'yaml',
       }
 
       -- Install parsers (async). Re-run :TSUpdate to update them.
