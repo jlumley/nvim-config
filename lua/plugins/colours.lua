@@ -16,6 +16,12 @@
       lazy = false,
       priority = 1000,
     },
+    {
+      'rose-pine/neovim',
+      name = 'rose-pine',
+      lazy = false,
+      priority = 1000,
+    },
     -- apply the selected scheme after the plugins above have loaded
     {
       "LazyVim/LazyVim",
