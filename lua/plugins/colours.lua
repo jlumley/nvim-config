@@ -1,20 +1,25 @@
-return {
-  'sainnhe/everforest',
-  lazy = false,
-  priority = 1000,
-  config = function()
-    -- Optionally configure and load the colorscheme
-    -- directly inside the plugin declaration.
-    vim.g.everforest_enable_italic = true
-    vim.cmd.colorscheme 'everforest'
-  end,
-}
--- {
---   'folke/tokyonight.nvim',
---   priority = 1000,
---   init = function()
---     vim.cmd.colorscheme 'tokyonight-night'
---     vim.cmd.hi 'Comment gui=none'
---   end,
--- },
---
+  -- Theme is chosen by $NVIM_COLORSCHEME (set by Ansible via ~/.zshenv);
+  -- falls back to everforest when the env var is unset.
+  local scheme = vim.env.NVIM_COLORSCHEME or "everforest"
+
+  return {
+    {
+      'sainnhe/everforest',
+      lazy = false,
+      priority = 1000,
+      config = function()
+        vim.g.everforest_enable_italic = true
+      end,
+    },
+    {
+      'folke/tokyonight.nvim',
+      lazy = false,
+      priority = 1000,
+    },
+    -- apply the selected scheme after the plugins above have loaded
+    {
+      "LazyVim/LazyVim",
+      optional = true,
+      init = function() vim.cmd.colorscheme(scheme) end,
+    },
+  }
